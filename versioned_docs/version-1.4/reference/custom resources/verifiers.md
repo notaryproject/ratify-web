@@ -1,7 +1,7 @@
 Verifier
 ---
 
-Ratify supports many verifiers to validate different artifact types. Please refer to [plugins](../../plugins/Verifier/) documentation for details on supported verifiers.
+Ratify supports many verifiers to validate different artifact types. Please refer to [plugins](../../plugins/verifier/) documentation for details on supported verifiers.
 
 ## Table of Contents
 - [Verifier](#verifier)

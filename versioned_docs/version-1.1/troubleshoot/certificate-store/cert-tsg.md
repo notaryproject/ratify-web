@@ -27,7 +27,7 @@ This error occurs when Ratify fails to fetch certificates from akv provider due 
 Reconciler error CertificateStore=gatekeeper-system/certstore-akv controller=certificatestore controllerGroup=config.ratify.deislabs.io controllerKind=CertificateStore error=Error fetching certificates in store certstore-akv with azurekeyvault provider
 
 error: failed to get secret objectName:Certname, objectVersion:, error: keyvault.BaseClient#GetSecret: Failure responding to request: StatusCode=403, 
-Original Error: autorest/azure: Service returned an error. Status=403 Code="Forbidden" Message="The user, group or application 'appid=app;iss=https://sts.windows.net/tenant_id/' ***does not have secrets get permission*** on key vault 'keyvaultname;location=eastus'. For help resolving this issue, please see https://go.microsoft.com/fwlink/?linkid=2125287" InnerError={"code":"***AccessDenied***"}
+`Original Error: autorest/azure: Service returned an error. Status=403 Code="Forbidden" Message="The user, group or application 'appid=app;iss=https://sts.windows.net/tenant_id/' ***does not have secrets get permission*** on key vault 'keyvaultname;location=eastus'. For help resolving this issue, please see https://go.microsoft.com/fwlink/?linkid=2125287" InnerError={"code":"***AccessDenied***"}`
 
 ##### Cause and Solution
 
