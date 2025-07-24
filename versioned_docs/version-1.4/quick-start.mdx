@@ -8,14 +8,14 @@ sidebar_position: 2
 Try out ratify in Kubernetes through Gatekeeper as the admission controller.
 
 Prerequisites:
-- Kubernetes v1.20 or higher
-- OPA Gatekeeper v3.10 or higher
-- [helmfile](https://helmfile.readthedocs.io/en/latest/#installation) v0.14 or higher. For production use and if you would like to avoid automatic installation of resources using helmfile, please refer to [ratify-quickstart-manual.md](quickstarts/quickstart-manual.md) for manual install steps.
+- Kubernetes v1.30 or higher
+- OPA Gatekeeper v3.18 or higher
+- [helmfile](https://helmfile.readthedocs.io/en/latest/#installation) >= v0.14 and < v1.0.0. For production use and if you would like to avoid automatic installation of resources using helmfile, please refer to [ratify-quickstart-manual.md](quickstarts/quickstart-manual.md) for manual install steps.
 
 ### Step 1: Install Gatekeeper, Ratify, and Constraints
 
 ```bash
-helmfile sync -f git::https://github.com/notaryproject/ratify.git@helmfile.yaml
+helmfile sync -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml?ref=v1.4.0' 
 ```
 
 > **NOTE** To use the latest development version of Ratify instead, refer to this [document](https://github.com/notaryproject/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile)
@@ -49,7 +49,7 @@ You just validated the container images in your k8s cluster!
 
 ### Step 3: Uninstall
 ```bash
-helmfile destroy --skip-charts -f git::https://github.com/notaryproject/ratify.git@helmfile.yaml
+helmfile destroy --skip-charts -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml?ref=v1.4.0' 
 ```
 
 ### Notes
