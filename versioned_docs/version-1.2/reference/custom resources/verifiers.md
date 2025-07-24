@@ -1,6 +1,6 @@
 # Verifier
 
-Ratify supports many verifiers to validate different artifact types. Please refer to [plugins](../../plugins/Verifier/) documentation for details on supported verifiers.
+Ratify supports many verifiers to validate different artifact types. Please refer to [plugins](../../plugins/verifier/) documentation for details on supported verifiers.
 
 ## Scope
 Verifiers can be defined as cluster-wide resources(using the kind `Verifier`) or namespaced resources(using the kind `NamespacedVerifier`).
