@@ -64,9 +64,10 @@ Executors support three types of scope patterns with precedence order:
 2. **Exact registry match**: `registry.example.com`
 3. **Wildcard registry match**: `*.example.com`
 
-**Important Notes:**
+:::important
 - **Top-level domain wildcards (`*`) are not supported.**
 - **❌ ERROR: Overlapping scopes between different Executors will cause configuration failure.** Each scope must be uniquely assigned to only one executor. Attempting to configure multiple executors with overlapping scopes will result in an error during executor initialization.
+:::
 
 ## Verifier Configuration
 
