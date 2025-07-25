@@ -4,12 +4,13 @@ sidebar_position: 1
 
 # Manual Quick Start Steps
 
-This document outlines the **manual** production ready steps to install Ratify with Gatekeeper in admission control scenarios. Please refer to the [README.MD](../quick-start.mdx) for recommended install steps.
+This document outlines the **manual** production ready steps to install the latest development version of Ratify with Gatekeeper in admission control scenarios. Please refer to the [Quick Start](../quick-start.mdx) for recommended install steps.
 
 Prerequisites:
-
-- Kubernetes v1.20 or higher
-- OPA Gatekeeper v3.10 or higher  
+- Kubernetes v1.30+, Minikube is used in this guide
+- kubectl v1.30+
+- Helm v3.0+
+- OPA Gatekeeper v3.18+
 
 ## Step 1: Setup Gatekeeper with [external data](https://open-policy-agent.github.io/gatekeeper/website/docs/externaldata)
 
@@ -31,34 +32,32 @@ helm install gatekeeper/gatekeeper  \
 
 ## Step 2: Deploy ratify on gatekeeper in the gatekeeper-system namespace
 
-- Option 1: Install the last released version of Ratify
-
-Note: if the crt/key/cabundle are NOT set under `provider.tls` in values.yaml, helm would generate a CA certificate and server key/certificate for you.
+- Option 1: Install the last development version of Ratify
 
 ```bash
 helm repo add ratify https://notaryproject.github.io/ratify
 # download the notary verification certificate
-curl -sSLO https://raw.githubusercontent.com/deislabs/ratify/main/test/testdata/notation.crt
-helm install ratify \
-    ratify/ratify --atomic \
-    --namespace gatekeeper-system \
-    --set-file notationCerts={./notation.crt} \
-    --set featureFlags.RATIFY_CERT_ROTATION=true \
-    --set policy.useRego=true
+curl -sSLO https://raw.githubusercontent.com/notaryproject/ratify/main/test/testdata/notation.crt
+helm install ratify-gatekeeper-provider \
+  ratify/ratify-gatekeeper-provider --atomic \
+  --version 2.0.0-dev \
+  --namespace gatekeeper-system --create-namespace \
+  --set 'executor.scopes[0]=ghcr.io' \
+  --set 'notation.certs[0].provider=inline' \
+  --set-file 'notation.certs[0].cert=./notation.crt'
 ```
 
 - Option 2: Install ratify with charts from your local branch.
 
-> Note: Latest chart in main may not be compatible with the last released version of ratify image, learn more about weekly dev builds [here](https://github.com/notaryproject/ratify/blob/main/RELEASES.md#weekly-dev-release)
-
 ```bash
 git clone https://github.com/notaryproject/ratify.git
 cd ratify
-helm install ratify \
-    ./charts/ratify --atomic \
-    --namespace gatekeeper-system \
-    --set-file notationCerts={./test/testdata/notation.crt} \
-    --set featureFlags.RATIFY_CERT_ROTATION=true
+helm install ratify-gatekeeper-provider \
+  ./deployments/ratify-gatekeeper-provider --atomic \
+  --namespace gatekeeper-system --create-namespace \
+  --set 'executor.scopes[0]=ghcr.io' \
+  --set 'notation.certs[0].provider=inline' \
+  --set-file 'notation.certs[0].cert=./notation.crt'
 ```
 
 ## Step 3: See Ratify in action
@@ -66,8 +65,8 @@ helm install ratify \
 - Deploy a `demo` constraint
 
 ```bash
-kubectl apply -f https://notaryproject.github.io/ratify/library/default/template.yaml
-kubectl apply -f https://notaryproject.github.io/ratify/library/default/samples/constraint.yaml
+kubectl apply -f https://raw.githubusercontent.com/notaryproject/ratify/main/configs/constrainttemplates/default/template.yaml
+kubectl apply -f https://raw.githubusercontent.com/notaryproject/ratify/main/configs/constrainttemplates/default/constraint.yaml
 ```
 
 Once the installation is completed, you can test the deployment of an image that is signed using Notary V2 solution.
@@ -90,7 +89,8 @@ kubectl run demo1 --namespace default --image=ghcr.io/deislabs/ratify/notary-ima
 You will see a deny message from Gatekeeper denying the request to create it as the image doesn't have any signatures.
 
 ```bash
-Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Subject failed verification: wabbitnetworks.azurecr.io/test/net-monitor:unsigned
+Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Artifact failed verification: ghcr.io/deislabs/ratify/notary-image@sha256:17490f904cf278d4314a1ccba407fc8fd00fb45303589b8cc7f5174ac35554f4, 
+report: {"artifactReports": null, "succeeded": false}
 ```
 
 You just validated the container images in your k8s cluster!
@@ -100,8 +100,7 @@ You just validated the container images in your k8s cluster!
 Notes: Helm does NOT support upgrading CRDs, so uninstalling Ratify will require you to delete the CRDs manually. Otherwise, you might fail to install CRDs of newer versions when installing Ratify.
 
 ```bash
-kubectl delete -f https://notaryproject.github.io/ratify/library/default/template.yaml
-kubectl delete -f https://notaryproject.github.io/ratify/library/default/samples/constraint.yaml
-helm delete ratify --namespace gatekeeper-system
-kubectl delete crd stores.config.ratify.deislabs.io verifiers.config.ratify.deislabs.io certificatestores.config.ratify.deislabs.io policies.config.ratify.deislabs.io
+kubectl delete -f https://raw.githubusercontent.com/notaryproject/ratify/main/configs/constrainttemplates/default/template.yaml
+helm delete ratify-gatekeeper-provider --namespace gatekeeper-system
+kubectl delete crd executors.config.ratify.dev
 ```
