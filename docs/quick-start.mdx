@@ -46,7 +46,9 @@ report: {"artifactReports": null, "succeeded": false}
 
 You just validated the container images in your k8s cluster!
 
-### Step 3: Uninstall
+### Uninstall
+
+If you want to uninstall Ratify, run the command below
 ```bash
 helmfile destroy --skip-charts -f 'git::https://github.com/notaryproject/ratify.git@dev.helmfile.yaml.gotmpl'
 ```
