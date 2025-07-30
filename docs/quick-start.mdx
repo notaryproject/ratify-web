@@ -3,22 +3,20 @@ title: Getting Started
 sidebar_position: 2
 ---
 
-> **Note** You can follow this [interactive tutorial](https://killercoda.com/notaryproject/scenario/notation/ratify) to get started with Ratify within 5 minutes in an online playground.
+Try out the latest development version of ratify in Kubernetes through Gatekeeper as the admission controller.
 
-Try out ratify in Kubernetes through Gatekeeper as the admission controller.
+## Prerequisites
 
-Prerequisites:
-- Kubernetes v1.20 or higher
-- OPA Gatekeeper v3.10 or higher
-- [helmfile](https://helmfile.readthedocs.io/en/latest/#installation) v0.14 or higher. For production use and if you would like to avoid automatic installation of resources using helmfile, please refer to [ratify-quickstart-manual.md](quickstarts/quickstart-manual.md) for manual install steps.
+- Any Kubernetes cluster (we use minikube in this tutorial)
+- [Helmfile](https://helmfile.readthedocs.io/en/latest/#installation) v1.0.0 or higher
+
+If you prefer manual installation without helmfile automation, please refer to [ratify-quickstart-manual.md](quickstarts/quickstart-manual.md) for step-by-step instructions.
 
 ### Step 1: Install Gatekeeper, Ratify, and Constraints
 
 ```bash
-helmfile sync -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml.gotmpl?ref=v1'
+helmfile sync -f 'git::https://github.com/notaryproject/ratify.git@dev.helmfile.yaml.gotmpl'
 ```
-
-> **NOTE** To use the latest development version of Ratify instead, refer to this [document](https://github.com/notaryproject/ratify/blob/main/CONTRIBUTING.md#deploy-using-dev-helmfile)
 
 ### Step 2: See Ratify in action
 
@@ -42,14 +40,17 @@ kubectl run demo1 --image=ghcr.io/deislabs/ratify/notary-image:unsigned -n defau
 You will see a deny message from Gatekeeper denying the request to create it as the image doesn't have any signatures.
 
 ```bash
-Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Subject failed verification: wabbitnetworks.azurecr.io/test/net-monitor:unsigned
+Error from server (Forbidden): admission webhook "validation.gatekeeper.sh" denied the request: [ratify-constraint] Artifact failed verification: ghcr.io/deislabs/ratify/notary-image@sha256:17490f904cf278d4314a1ccba407fc8fd00fb45303589b8cc7f5174ac35554f4, 
+report: {"artifactReports": null, "succeeded": false}
 ```
 
 You just validated the container images in your k8s cluster!
 
-### Step 3: Uninstall
+### Uninstall
+
+If you want to uninstall Ratify, run the command below
 ```bash
-helmfile destroy --skip-charts -f 'git::https://github.com/notaryproject/ratify.git@helmfile.yaml.gotmpl?ref=v1'
+helmfile destroy --skip-charts -f 'git::https://github.com/notaryproject/ratify.git@dev.helmfile.yaml.gotmpl'
 ```
 
 ### Notes
