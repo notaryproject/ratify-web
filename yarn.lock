@@ -11173,9 +11173,9 @@ q@^1.1.2:
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
 
 qs@^6.4.0, qs@~6.14.0:
-  version "6.14.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.14.0.tgz#c63fa40680d2c5c941412a0e899c89af60c0a930"
-  integrity sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==
+  version "6.14.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.14.1.tgz#b120ec17fba6a1d84c5063e9f94e2b969d723075"
+  integrity sha512-GHOYRPr6hQTMJIL3SDUolM4ANRnKvJwSmOTWojDaMQ12FaJvPC2xJOjQLIqfS9el0xy/+1V8UhvchU1ljPp++w==
   dependencies:
     side-channel "^1.1.0"
 
